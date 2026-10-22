@@ -67,3 +67,31 @@ print(players["player"].nunique())
 
 # check for position and number of players in that pos
 print(players["position"].value_counts())
+
+# Check duplicates in player statistics
+print("Duplicates in player stats:")
+print(players_clean[
+    players_clean["player"].duplicated(keep=False)
+]["player"].value_counts())
+
+# Check duplicates in player stats
+print("\nDuplicates in transfer data:")
+duplicate_players = players_clean[
+    players_clean["player"].duplicated(keep=False)
+].sort_values("player")
+
+print(duplicate_players[["player", "squad", "minutes_played"]].to_string(index=False))
+
+combined_minutes = (
+    players_clean
+    .groupby("player", as_index=False)["minutes_played"]
+    .sum()
+)
+
+print(
+    combined_minutes[
+        combined_minutes["player"].isin(
+            duplicate_players["player"].unique()
+        )
+    ].to_string(index=False)
+)
