@@ -1,6 +1,5 @@
 from pathlib import Path
 import pandas as pd
-from openpyxl.utils.datetime import to_excel
 
 project_root = Path(__file__).resolve().parent.parent
 raw_dir = project_root / "data" / "raw"
@@ -11,13 +10,14 @@ players = pd.read_excel(
     engine= "openpyxl"
 )
 
-print("Dataset shape :", players.shape)
+# inspecting raw data
+print("Shape:", players.shape)
 print("\nMissing values per column:")
 print(players.isnull().sum())
 
-print("\nDuplicate rows:", players.duplicated().sum())
-print(players.dtypes) # initial checking
-
+# checking for duplicates
+print("\nDuplicated rows:", players.duplicated().sum())
+print(players.dtypes)
 
 # detecting any missing values
 missing_rows = players[players.isnull().any(axis=1)]
@@ -38,7 +38,7 @@ players.columns = [
     "goals_assists_minus_penalties_per_90", "matches"
 ]
 
-# dropping the matches column since it does not giving anything
+# dropping the matches column since it do not giving anything
 players_clean = players.drop(columns=["matches"])
 
 # saving cleaned data
